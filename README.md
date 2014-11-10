@@ -44,7 +44,7 @@ end
 class Subscriber
   include Shield::Policies
 
-  policies :is_active_user
+  policies.with(IsActiveUser, user)
 
   def subscribe(user)
     policies.apply!
