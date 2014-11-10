@@ -34,6 +34,8 @@ Or install it yourself as:
 ```ruby
 # Simple case
 module IsActiveUser
+  extend self
+
   def call(user)
     user.email_confirmed? && user.last_login_at > 14.days.ago    
   end
