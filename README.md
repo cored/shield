@@ -10,7 +10,9 @@ those operations get a little bit complex.
 The following resources brought some inspirations to the lib:
 
 [Rails - the Missing Parts - Policies](http://eng.joingrouper.com/blog/2014/03/20/rails-the-missing-parts-policies)
+
 [Doman Driven Rails - Yan Pritzker](http://www.windycityrails.org/videos/2014/#6)
+
 [7 Patterns to Refactor Fat ActiveRecord Models](http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/)
 
 ## Installation
