@@ -32,22 +32,20 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-# Simple case
-module IsActiveUser
-  extend self
-
-  def call(user)
-    user.email_confirmed? && user.last_login_at > 14.days.ago    
+# Policy definition
+class UserCanCreateProject
+  def validate!
+    user.is_admin?
   end
 end
 
-class Subscriber
+# Policies usage implementation
+class Service
   include Shield::Policies
 
-  policies.with(IsActiveUser, user)
-
-  def subscribe(user)
-    policies.apply!
+  def process(user)
+    policies.with(UserCanCreateProject, user).apply!
+    # More stuff
   end
 end
 ```
