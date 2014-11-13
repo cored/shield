@@ -6,36 +6,26 @@ module Shield
   end
 
   class Policies
-    def self.with(klass, *args)
-      new.with(klass, *args)
+    def self.with(policy)
+      new.with(policy)
     end
 
     def initialize
       @policies = []
     end
 
-    def with(klass, *args)
-      @policies << Policy.new(klass, args)
+    def with(policy)
+      policies << policy
       self
     end
 
-    def apply!
-      @policies.inject(&:validate)
-    end
-  end
-
-  class Policy
-    def initialize(klass, args)
-      @klass = klass
-      @args = args
-    end
-
-    def validate
-      klass.new.validate(args)
+    def apply
+      policies.all?(&:validate)
     end
 
     private
 
-    attr_reader :klass, :args
+    attr_reader :policies
   end
 end
+
