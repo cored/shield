@@ -33,19 +33,25 @@ Or install it yourself as:
 
 ```ruby
 # Simple case
-module IsActiveUser
-  def call(user)
-    user.email_confirmed? && user.last_login_at > 14.days.ago    
+class IsActiveUser
+  def initialize(user)
+    @user = user
   end
+
+  def validate
+    user.email_confirmed? && user.last_login_at > 14.days.ago
+  end
+
+  private
+
+  attr_reader :user
 end
 
 class Subscriber
-  include Shield::Policies
-
-  policies :is_active_user
+  include Shield
 
   def subscribe(user)
-    policies.apply!
+    policies.with(IsActiveUser.new(user)).apply
   end
 end
 ```
