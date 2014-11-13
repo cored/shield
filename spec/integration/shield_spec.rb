@@ -1,0 +1,44 @@
+require 'spec_helper'
+
+class DummyPolicy
+
+  def initialize(user)
+    @user = user
+  end
+
+  def validate
+    @user.admin?
+  end
+end
+
+class DummyService
+  include Shield
+
+  def initialize(user)
+    @user = user
+  end
+
+  def do_something
+    policies.with(DummyPolicy.new(@user)).apply
+  end
+end
+
+describe Shield do
+  describe '#apply!' do
+    context 'when validation succeded' do
+      let(:user) { double :user, admin?: true }
+
+      it 'execute all policies' do
+        expect(DummyService.new(user).do_something).to eql true
+      end
+    end
+
+    context 'when validation failed' do
+      let(:user) { double :user, admin?: false }
+
+      it 'execute all policies' do
+        expect(DummyService.new(user).do_something).to eql false
+      end
+    end
+  end
+end

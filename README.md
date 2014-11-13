@@ -32,20 +32,26 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-# Policy definition
-class UserCanCreateProject
-  def validate!
-    user.is_admin?
+# Simple case
+class IsActiveUser
+  def initialize(user)
+    @user = user
   end
+
+  def validate
+    user.email_confirmed? && user.last_login_at > 14.days.ago
+  end
+
+  private
+
+  attr_reader :user
 end
 
-# Policies usage implementation
-class Service
-  include Shield::Policies
+class Subscriber
+  include Shield
 
-  def process(user)
-    policies.with(UserCanCreateProject, user).apply!
-    # More stuff
+  def subscribe(user)
+    policies.with(IsActiveUser.new(user)).apply
   end
 end
 ```
