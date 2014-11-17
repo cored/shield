@@ -31,8 +31,9 @@ Or install it yourself as:
 
 ## Usage
 
+### Simple case
+
 ```ruby
-# Simple case
 class IsActiveUser
   def initialize(user)
     @user = user
@@ -52,6 +53,36 @@ class Subscriber
 
   def subscribe(user)
     policies.with(IsActiveUser.new(user)).apply
+  end
+end
+```
+
+### Throwing exceptions
+
+When calling `apply!` instead of `apply` shield will generate an exception
+dynamically for you with the error message that you specified the name will be
+based on the policy name plus the word error; ex. `IsActiveUserError`
+
+```ruby
+class IsActiveUser
+  def initialize(user)
+    @user = user
+  end
+
+  def validate
+    user.email_confirmed? && user.last_login_at > 14.days.ago
+  end
+
+  private
+
+  attr_reader :user
+end
+
+class Subscriber
+  include Shield
+
+  def subscribe(user)
+    policies.with(IsActiveUser.new(user)).apply!
   end
 end
 ```
