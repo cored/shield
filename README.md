@@ -65,7 +65,10 @@ based on the policy name plus the word error; ex. `IsActiveUserError`
 
 ```ruby
 class IsActiveUser
-  def initialize(user)
+  attr_reader :error
+
+  def initialize(user, error)
+    @error = error
     @user = user
   end
 
@@ -82,7 +85,7 @@ class Subscriber
   include Shield
 
   def subscribe(user)
-    policies.with(IsActiveUser.new(user)).apply!
+    policies.with(IsActiveUser.new(user, 'Policy failed')).apply!
   end
 end
 ```
