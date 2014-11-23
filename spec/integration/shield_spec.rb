@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 class DummyPolicy
-  def initialize(user)
+  attr_reader :error
+
+  def initialize(user, error='')
+    @error = error
     @user = user
   end
 
@@ -31,7 +34,7 @@ class DummyExceptionService
   end
 
   def do_something
-    policies.with(DummyPolicy.new(@user)).apply!
+    policies.with(DummyPolicy.new(@user, 'This policy failed')).apply!
   end
 end
 
@@ -61,7 +64,7 @@ describe Shield do
       it 'throws an exception' do
         expect { 
           DummyExceptionService.new(user).do_something
-        }.to raise_error
+        }.to raise_error("This policy failed")
       end
     end
   end

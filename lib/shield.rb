@@ -42,7 +42,7 @@ module Shield
       end
 
       def validate!
-        raise exception.new unless policy.validate
+        raise exception.new(policy.error) unless policy.validate
       end
 
       private
