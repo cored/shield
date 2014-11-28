@@ -62,7 +62,7 @@ describe Shield do
       let(:user) { double :user, admin?: false }
 
       it 'throws an exception' do
-        expect { 
+        expect {
           DummyExceptionService.new(user).do_something
         }.to raise_error("This policy failed")
       end
